@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_folium import folium_static
+import folium
 import geopandas as gpd
 import numpy as np
 import os
@@ -82,4 +83,7 @@ m = gdf.explore(
     location=(x, y),
     legend=True,
 )
+folium.Marker(
+    location=[x, y],
+).add_to(m)
 folium_static(m)
