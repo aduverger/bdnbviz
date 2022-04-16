@@ -30,7 +30,7 @@ xmax, ymax = transformer.transform(xmax, ymax)
 gdf = gpd.read_file(
     os.path.join(
         os.path.dirname((os.path.realpath(__file__))),
-        os.path.join("data", "bnb_export.gpkg"),
+        os.path.join("data", "bdnb.gpkg"),
     ),
     bbox=(xmin, ymin, xmax, ymax),
 )
