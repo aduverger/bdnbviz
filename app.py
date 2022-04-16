@@ -84,6 +84,6 @@ m = gdf.explore(
     legend=True,
 )
 folium.Marker(
-    location=[x, y],
+    location=[x, y], icon=folium.Icon(color="darkblue", icon="map-pin", prefix="fa")
 ).add_to(m)
 folium_static(m)
