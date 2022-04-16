@@ -1,4 +1,9 @@
+numpy
 geopandas
-leafmap
+geopy
 pyproj
 matplotlib
+streamlit
+streamlit-folium
+folium
+mapclassify
