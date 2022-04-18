@@ -28,7 +28,7 @@ transformer = Transformer.from_crs("epsg:4326", "epsg:2154")
 xmin, ymin = transformer.transform(xmin, ymin)
 xmax, ymax = transformer.transform(xmax, ymax)
 
-url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app"
+url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app/"
 url += f"getbbox?xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}"
 data = requests.get(url).json()
 gdf = gpd.GeoDataFrame.from_features(data["features"])
