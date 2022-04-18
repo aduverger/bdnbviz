@@ -4,6 +4,7 @@ import folium
 import geopandas as gpd
 import numpy as np
 import os
+import requests
 from geopy.geocoders import Nominatim
 from pyproj import Transformer
 
@@ -28,33 +29,11 @@ transformer = Transformer.from_crs("epsg:4326", "epsg:2154")
 xmin, ymin = transformer.transform(xmin, ymin)
 xmax, ymax = transformer.transform(xmax, ymax)
 
-gdf = gpd.read_file(
-    os.path.join(
-        os.path.dirname((os.path.realpath(__file__))),
-        os.path.join("data", "bdnb.gpkg"),
-    ),
-    bbox=(xmin, ymin, xmax, ymax),
-)
-gdf = gdf[
-    [
-        "geometry",
-        "cerffo2020_annee_construction",
-        "adedpe202006_mean_class_conso_ener",
-        "adedpe202006_mean_conso_ener",
-        "adedpe202006_mean_class_estim_ges",
-        "adedpe202006_mean_estim_ges",
-    ]
-]
-gdf.rename(
-    columns={
-        "cerffo2020_annee_construction": "Année de construction",
-        "adedpe202006_mean_class_conso_ener": "Etiquette énergétique (DPE)",
-        "adedpe202006_mean_conso_ener": "Consommations énergétiques, kWhEP/m².an (DPE)",
-        "adedpe202006_mean_class_estim_ges": "Etiquette carbone (DPE)",
-        "adedpe202006_mean_estim_ges": "Emissions de GES, kgC02eq/m².an (DPE)",
-    },
-    inplace=True,
-)
+url = f"http://127.0.0.1:8000/getbbox?xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}"
+data = requests.get(url).json()
+gdf = gpd.GeoDataFrame.from_features(data["features"])
+gdf = gdf.set_crs(epsg=2154)
+
 option = st.selectbox(
     "Quel critère souhaitez-vous afficher sur la carte ?",
     ("Etiquette énergétique", "Etiquette carbone"),

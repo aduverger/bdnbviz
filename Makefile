@@ -10,7 +10,7 @@ install_requirements:
 # ----------------------------------
 
 streamlit:
-	-@streamlit run bnbviz/app.py
+	-@streamlit run app.py
 
 heroku_login:
 	-@heroku login
