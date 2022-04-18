@@ -2,8 +2,7 @@ import streamlit as st
 from streamlit_folium import folium_static
 import folium
 import geopandas as gpd
-import numpy as np
-import os
+import math
 import requests
 from geopy.geocoders import Nominatim
 from pyproj import Transformer
@@ -23,8 +22,8 @@ location = geolocator.geocode(address)
 x, y = location.latitude, location.longitude
 xmin = x - radius / (2 * 110.574)
 xmax = x + radius / (2 * 110.574)
-ymin = y - radius / (2 * 111.320 * np.cos(np.pi * x / 180))
-ymax = y + radius / (2 * 111.320 * np.cos(np.pi * x / 180))
+ymin = y - radius / (2 * 111.320 * math.cos(math.pi * x / 180))
+ymax = y + radius / (2 * 111.320 * math.cos(math.pi * x / 180))
 transformer = Transformer.from_crs("epsg:4326", "epsg:2154")
 xmin, ymin = transformer.transform(xmin, ymin)
 xmax, ymax = transformer.transform(xmax, ymax)

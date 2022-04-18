@@ -1,10 +1,9 @@
-numpy
-geopandas
-geopy
-pyproj
-matplotlib
 streamlit
-streamlit-folium
+streamlit_folium
 folium
 mapclassify
+matplotlib
+geopandas
 requests
+geopy
+pyproj
