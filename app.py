@@ -13,7 +13,7 @@ address = st.text_input("Adresse recherchée", "11 rue de Charonne, 75011 Paris,
 radius = st.slider(
     "Sélectionnez un rayon (en km) autour de l'adresse recherchée. Restez à 1km pour de meilleures performances :)",
     1,
-    5,
+    3,
     1,
 )
 # Get bbox coordinates
@@ -43,7 +43,11 @@ if option == "Etiquette énergétique":
 else:
     feature = "Etiquette carbone (DPE)"
 
-gdf[feature].fillna(value="N", inplace=True)
+gdf.fillna(value="N.C.", inplace=True)
+gdf["Etiquette énergétique (DPE)"].replace(to_replace="N", value="N.C.", inplace=True)
+gdf["Etiquette carbone (DPE)"].replace(to_replace="N", value="N.C.", inplace=True)
+
+
 color = [
     "#309C6C",
     "#5FB14E",
