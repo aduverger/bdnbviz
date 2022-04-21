@@ -15,7 +15,7 @@ address = st.text_input("Adresse recherchée", "5 rue de Charonne, 75011 Paris, 
 geolocator = Nominatim(user_agent="bnbviz")
 location = geolocator.geocode(address)
 if (location is None) or ("France" not in location.address):
-    st.markdown("**❌  Veuillez entrer une adresse valide**")
+    st.markdown("❌ **Veuillez entrer une adresse valide en France métropolitaine**")
 else:
     radius = st.slider(
         "Sélectionnez un rayon (en km) autour de l'adresse recherchée. Restez à 1km pour de meilleures performances :)",
@@ -32,10 +32,10 @@ else:
     else:
         feature = "Etiquette carbone (DPE)"
 
-    if address == "5 rue de Charonne, 75011 Paris, France" and radius == 1:
+    if address == "5 rue de Charonne, 75011 Paris, France":
         with open(
             os.path.join(
-                os.path.dirname(os.path.realpath(__file__)), "default_gdf.json"
+                os.path.dirname(os.path.realpath(__file__)), f"default_gdf{radius}.json"
             )
         ) as default_data:
             data = json.load(default_data)
