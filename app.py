@@ -67,7 +67,7 @@ else:
             xmin, ymin = transformer.transform(xmin, ymin)
             xmax, ymax = transformer.transform(xmax, ymax)
 
-        url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app/"
+        url = "https://bdnb-image-v2-fzyx4l7upa-ew.a.run.app/"
         url += f"getbbox?xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}"
         data = requests.get(url).json()
 
