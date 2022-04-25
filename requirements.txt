@@ -7,3 +7,4 @@ geopandas
 requests
 geopy
 pyproj
+plotly
