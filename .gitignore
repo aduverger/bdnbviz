@@ -1,5 +1,4 @@
 *.zip
 *.qgs
-data/
 *.gpkg
 *.egg-info

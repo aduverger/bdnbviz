@@ -42,7 +42,9 @@ else:
     if address == "5 rue de Charonne, 75011 Paris, France":
         with open(
             os.path.join(
-                os.path.dirname(os.path.realpath(__file__)), f"default_gdf{radius}.json"
+                os.path.dirname(os.path.realpath(__file__)),
+                "data",
+                f"default_gdf{radius}.json",
             )
         ) as default_data:
             data = json.load(default_data)
@@ -65,8 +67,7 @@ else:
             xmin, ymin = transformer.transform(xmin, ymin)
             xmax, ymax = transformer.transform(xmax, ymax)
 
-        # url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app/"
-        url = "http://0.0.0.0:8000/"
+        url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app/"
         url += f"getbbox?xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}"
         data = requests.get(url).json()
 
