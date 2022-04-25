@@ -2,12 +2,15 @@ import streamlit as st
 from streamlit_folium import folium_static
 import folium
 import geopandas as gpd
+import pandas as pd
+import numpy as np
 import math
 import requests
 import os
 import json
 import re
 from geopy.geocoders import Nominatim
+from shapely.geometry import Polygon
 from pyproj import Transformer
 import plotly.express as px
 import plotly.figure_factory as ff
@@ -62,7 +65,8 @@ else:
             xmin, ymin = transformer.transform(xmin, ymin)
             xmax, ymax = transformer.transform(xmax, ymax)
 
-        url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app/"
+        # url = "https://bdnb-image-fzyx4l7upa-ew.a.run.app/"
+        url = "http://0.0.0.0:8000/"
         url += f"getbbox?xmin={xmin}&xmax={xmax}&ymin={ymin}&ymax={ymax}"
         data = requests.get(url).json()
 
@@ -77,23 +81,16 @@ else:
             "Surface habitable (estimée)",
             "Nombre de logements",
             "Etiquette énergétique (DPE)",
-            "Consommation énergétique [kWhEP/m².an] (DPE)",
+            "Conso énergétique [kWhEP/m².an] (DPE)",
             "Etiquette carbone (DPE)",
             "Emissions de GES [kgC02eq/m².an] (DPE)",
             "Types d'énergie",
-            "Consommation électrique totale [kwhEF/an] (MTEDLE)",
-            "Consommation de gaz totale [kwhEF/an] (MTEDLE)",
+            "Conso électrique [kwhEF/an] (MTEDLE)",
+            "Conso de gaz [kwhEF/an] (MTEDLE)",
             "Générateurs de chauffage",
             "Générateurs d'ECS",
         ]
     ]
-    gdf = gdf.rename(
-        columns={
-            "Consommation énergétique [kWhEP/m².an] (DPE)": "Conso énergétique [kWhEP/m².an] (DPE)",
-            "Consommation électrique totale [kwhEF/an] (MTEDLE)": "Conso électrique [kwhEF/an] (MTEDLE)",
-            "Consommation de gaz totale [kwhEF/an] (MTEDLE)": "Conso de gaz [kwhEF/an] (MTEDLE)",
-        }
-    )
     color = [
         "#309C6C",
         "#5FB14E",
@@ -104,6 +101,158 @@ else:
         "#CE1E15",
         "#C3C3C3",
     ]
+    fake_gdf = pd.DataFrame(
+        [
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "A",
+                np.NaN,
+                "A",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "B",
+                np.NaN,
+                "B",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "C",
+                np.NaN,
+                "C",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "D",
+                np.NaN,
+                "D",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "E",
+                np.NaN,
+                "E",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "F",
+                np.NaN,
+                "F",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "G",
+                np.NaN,
+                "G",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+            [
+                Polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]),
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                "N.C.",
+                np.NaN,
+                "N.C.",
+                np.NaN,
+                [np.NaN],
+                np.NaN,
+                np.NaN,
+                np.NaN,
+                np.NaN,
+            ],
+        ],
+        columns=gdf.columns,
+    )
+
+    gdf_map = pd.concat([gdf, fake_gdf], ignore_index=True)
+    gdf_map = gdf_map.set_crs(epsg=2154)
+    gdf_map.explore(
+        feature,
+        cmap=color,
+        tiles="CartoDB positron",
+        zoom_start=18,
+        location=(x, y),
+        legend=True,
+    )
     m = gdf.explore(
         feature,
         cmap=color,
@@ -188,6 +337,8 @@ else:
             height=700,
             data_frame=gdf_corr,
         )
+        fig_corr.update_xaxes(categoryorder="category ascending")
+        fig_corr.update_yaxes(categoryorder="category ascending")
         if feat_x == "Année de construction":
             fig_corr.update_layout(xaxis_range=[1700, 2021])
         st.plotly_chart(fig_corr, use_container_width=True)
