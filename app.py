@@ -14,7 +14,7 @@ from pyproj import Transformer
 import plotly.express as px
 
 
-@st.cache()
+@st.cache(max_entries=4)
 def get_data(address: str, radius: int):
     if address == "5 rue de Charonne, 75011 Paris, France":
         with open(
@@ -108,7 +108,7 @@ def get_map(gdf: gpd.GeoDataFrame, x: float, y: float):
     return m
 
 
-@st.cache()
+@st.cache(max_entries=1)
 def get_fake_gdf():
     fake_gdf = pd.DataFrame(
         [
