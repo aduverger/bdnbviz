@@ -13,6 +13,11 @@ from shapely.geometry import Polygon
 from pyproj import Transformer
 import plotly.express as px
 
+st.set_page_config(
+    page_title="BDNB Viz",
+    page_icon="⚡",
+)
+
 
 @st.cache(max_entries=4)
 def get_data(address: str, radius: int):
