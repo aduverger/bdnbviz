@@ -8,35 +8,14 @@ import math
 import requests
 import os
 import json
-import re
 from geopy.geocoders import Nominatim
 from shapely.geometry import Polygon
 from pyproj import Transformer
 import plotly.express as px
-import plotly.figure_factory as ff
 
 
-st.markdown("# BDNB Viz 🗺")
-
-address = st.text_input(
-    "Adresse recherchée (rayon d'1 km)", "5 rue de Charonne, 75011 Paris, France"
-)
-geolocator = Nominatim(user_agent="bnbviz")
-location = geolocator.geocode(address)
-if (location is None) or ("France" not in location.address):
-    st.markdown("❌ **Veuillez entrer une adresse valide en France métropolitaine**")
-else:
-    st.markdown(f"**Adresse trouvée:** *{location.address}*")
-    radius = 1
-    option = st.selectbox(
-        "Quel critère souhaitez-vous afficher sur la carte ?",
-        ("Etiquette énergétique", "Etiquette carbone"),
-    )
-    if option == "Etiquette énergétique":
-        feature = "Etiquette énergétique (DPE)"
-    else:
-        feature = "Etiquette carbone (DPE)"
-
+@st.cache()
+def get_data(address: str, radius: int):
     if address == "5 rue de Charonne, 75011 Paris, France":
         with open(
             os.path.join(
@@ -90,6 +69,10 @@ else:
             "Générateurs d'ECS",
         ]
     ]
+    return gdf, x, y
+
+
+def get_map(gdf: gpd.GeoDataFrame, x: float, y: float):
     color = [
         "#309C6C",
         "#5FB14E",
@@ -100,6 +83,33 @@ else:
         "#CE1E15",
         "#C3C3C3",
     ]
+    fake_gdf = get_fake_gdf()
+    gdf_map = pd.concat([gdf, fake_gdf], ignore_index=True)
+    gdf_map = gdf_map.set_crs(epsg=2154)
+    gdf_map.explore(
+        feature,
+        cmap=color,
+        tiles="CartoDB positron",
+        zoom_start=18,
+        location=(x, y),
+        legend=True,
+    )
+    m = gdf.explore(
+        feature,
+        cmap=color,
+        tiles="CartoDB positron",
+        zoom_start=18,
+        location=(x, y),
+        legend=True,
+    )
+    folium.Marker(
+        location=[x, y], icon=folium.Icon(color="darkblue", icon="map-pin", prefix="fa")
+    ).add_to(m)
+    return m
+
+
+@st.cache()
+def get_fake_gdf():
     fake_gdf = pd.DataFrame(
         [
             [
@@ -241,28 +251,31 @@ else:
         ],
         columns=gdf.columns,
     )
+    return fake_gdf
 
-    gdf_map = pd.concat([gdf, fake_gdf], ignore_index=True)
-    gdf_map = gdf_map.set_crs(epsg=2154)
-    gdf_map.explore(
-        feature,
-        cmap=color,
-        tiles="CartoDB positron",
-        zoom_start=18,
-        location=(x, y),
-        legend=True,
+
+st.markdown("# BDNB Viz 🗺")
+
+address = st.text_input(
+    "Adresse recherchée (rayon d'1 km)", "5 rue de Charonne, 75011 Paris, France"
+)
+geolocator = Nominatim(user_agent="bnbviz")
+location = geolocator.geocode(address)
+if (location is None) or ("France" not in location.address):
+    st.markdown("❌ **Veuillez entrer une adresse valide en France métropolitaine**")
+else:
+    st.markdown(f"**Adresse trouvée:** *{location.address}*")
+    gdf, x, y = get_data(address=address, radius=1)
+    option = st.selectbox(
+        "Quel critère souhaitez-vous afficher sur la carte ?",
+        ("Etiquette énergétique", "Etiquette carbone"),
     )
-    m = gdf.explore(
-        feature,
-        cmap=color,
-        tiles="CartoDB positron",
-        zoom_start=18,
-        location=(x, y),
-        legend=True,
-    )
-    folium.Marker(
-        location=[x, y], icon=folium.Icon(color="darkblue", icon="map-pin", prefix="fa")
-    ).add_to(m)
+    if option == "Etiquette énergétique":
+        feature = "Etiquette énergétique (DPE)"
+    else:
+        feature = "Etiquette carbone (DPE)"
+
+    m = get_map(gdf, x, y)
     folium_static(m)
 
     st.markdown("# Données sur la zone")
