@@ -18,18 +18,16 @@ import plotly.figure_factory as ff
 
 st.markdown("# BDNB Viz 🗺")
 
-address = st.text_input("Adresse recherchée", "5 rue de Charonne, 75011 Paris, France")
+address = st.text_input(
+    "Adresse recherchée (rayon d'1 km)", "5 rue de Charonne, 75011 Paris, France"
+)
 geolocator = Nominatim(user_agent="bnbviz")
 location = geolocator.geocode(address)
 if (location is None) or ("France" not in location.address):
     st.markdown("❌ **Veuillez entrer une adresse valide en France métropolitaine**")
 else:
-    radius = st.slider(
-        "Sélectionnez un rayon (en km) autour de l'adresse recherchée. Restez à 1km pour de meilleures performances :)",
-        1,
-        3,
-        1,
-    )
+    st.markdown(f"**Adresse trouvée:** *{location.address}*")
+    radius = 1
     option = st.selectbox(
         "Quel critère souhaitez-vous afficher sur la carte ?",
         ("Etiquette énergétique", "Etiquette carbone"),
