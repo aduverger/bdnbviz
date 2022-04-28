@@ -6,7 +6,7 @@ Python-based visualisation tool for french [BDNB database](https://www.data.gouv
 The Web App is hosted at: [https://bdnb-viz.herokuapp.com](https://bdnb-viz.herokuapp.com/)
 
 First you need to enter the address you are looking for.
-Informations from buildings within a 1 km radius from this address will then be displayed:
+Informations of buildings within a 1 km radius from this address will then be displayed:
 
 ![Enter your address](img/Web-1.png)
 
